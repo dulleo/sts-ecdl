@@ -50,7 +50,6 @@ public class Answer {
 		this.name = name;
 	}
 
-	
 	public Question getQuestion() {
 		return question;
 	}
