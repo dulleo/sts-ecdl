@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,8 @@ import com.duskol.edcl.model.Test;
 import com.duskol.edcl.service.TestService;
 
 @RestController
-@RequestMapping(value="/tests")
+@RequestMapping(value="/ecdl/tests")
+@CrossOrigin
 public class TestController {
 	
 	private final static Logger logger = LoggerFactory.getLogger(TestController.class);
@@ -36,6 +38,7 @@ public class TestController {
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value=HttpStatus.CREATED)
 	public Test createTest(@RequestBody @Valid Test test) {
+		logger.info("Save test called....");
 		return testService.createTest(test);
 	}
 	
