@@ -3,9 +3,12 @@ package com.duskol.edcl.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.duskol.edcl.controller.TestController;
 import com.duskol.edcl.controller.exception.ResourceNotFoundException;
 import com.duskol.edcl.error.ErrorCodes;
 import com.duskol.edcl.model.Test;
@@ -19,11 +22,14 @@ import com.duskol.edcl.repository.TestRepository;
 @Service
 public class TestServiceImpl implements TestService {
 	
+	private final static Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
+	
 	@Autowired
 	TestRepository testRepository;
 
 	@Override
 	public Test createTest(Test test) {
+		logger.info("Test to save: " + test.toString());
 		return testRepository.save(test);
 	}
 
