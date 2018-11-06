@@ -8,12 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,7 +27,6 @@ import com.duskol.edcl.service.TestService;
 
 @RestController
 @RequestMapping(value="/ecdl/tests")
-@CrossOrigin
 public class TestController {
 	
 	private final static Logger logger = LoggerFactory.getLogger(TestController.class);
@@ -40,6 +39,13 @@ public class TestController {
 	public Test createTest(@RequestBody @Valid Test test) {
 		logger.info("Save test called....");
 		return testService.createTest(test);
+	}
+	
+	@PutMapping(consumes = "application/json", produces = "application/json")
+	@ResponseStatus(value=HttpStatus.CREATED)
+	public Test editTest(@RequestBody @Valid Test test) throws ResourceNotFoundException {
+		logger.info("Edit test called....");
+		return testService.editTest(test);
 	}
 	
 	@GetMapping("/{id}")
@@ -69,4 +75,6 @@ public class TestController {
 		ErrorCodes errorCode = e.getErrorCode();
 		return new ErrorResponse(errorCode.getCode(), e.getMessage());
 	}
+	
+	
 }
