@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.duskol.edcl.controller.TestController;
 import com.duskol.edcl.controller.exception.ResourceNotFoundException;
 import com.duskol.edcl.error.ErrorCodes;
 import com.duskol.edcl.model.Test;
@@ -54,5 +53,21 @@ public class TestServiceImpl implements TestService {
 		
 		testRepository.deleteById(id);
 		
+	}
+
+	@Override
+	public Test editTest(Test test) throws ResourceNotFoundException {
+
+		logger.info("Test to edit: " + test.toString());
+		
+		Optional<Test> optional = testRepository.findById(test.getId());
+		
+		if(!optional.isPresent())
+			throw new ResourceNotFoundException("Test id:" + test.getId() + " not found!", ErrorCodes.TEST_NOT_FOUND);
+		
+		Test t = new Test();
+		t.setId(test.getId());
+		t.setName(test.getName());
+		return testRepository.save(t);
 	}
 }
