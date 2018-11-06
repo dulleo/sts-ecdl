@@ -11,11 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * 
  * Created by duskol on Nov 2, 2018
@@ -33,10 +28,20 @@ public class Question {
 	@Column(name="name")
 	private String name;
 	
+	@Column(name="type")
+	private QuestionType type;
+	
+	public QuestionType getType() {
+		return type;
+	}
+
+	public void setType(QuestionType type) {
+		this.type = type;
+	}
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "test_id", nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonIgnore
+	//@OnDelete(action = OnDeleteAction.CASCADE)
 	private Test test;
 
 	public Long getId() {
