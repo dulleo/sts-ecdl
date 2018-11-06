@@ -2,6 +2,8 @@ package com.duskol.edcl.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.duskol.edcl.controller.exception.ResourceNotFoundException;
 import com.duskol.edcl.model.Test;
 
@@ -14,5 +16,7 @@ public interface TestService {
 	List<Test> getTests();
 
 	void deleteTest(Long id) throws ResourceNotFoundException;
+
+	Test editTest(@Valid Test test) throws ResourceNotFoundException;
 
 }
