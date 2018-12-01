@@ -1,4 +1,4 @@
-package com.duskol.edcl.model;
+package com.duskol.ecdl.model;
 
 public enum QuestionType {
 	
