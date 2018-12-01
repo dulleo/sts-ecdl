@@ -1,6 +1,6 @@
-package com.duskol.edcl.controller.exception;
+package com.duskol.ecdl.controller.exception;
 
-import com.duskol.edcl.error.ErrorCodes;
+import com.duskol.ecdl.error.ErrorCodes;
 
 public class ResourceNotFoundException extends Exception {
 
