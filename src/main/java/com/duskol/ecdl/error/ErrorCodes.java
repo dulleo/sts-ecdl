@@ -1,8 +1,12 @@
-package com.duskol.edcl.error;
+package com.duskol.ecdl.error;
 
 public enum ErrorCodes {
 	
-	TEST_NOT_FOUND(1);
+	TEST_NOT_FOUND(1),
+	QUESTION_NOT_FOUND(2),
+	QUESTIONS_NOT_FOUND(3), 
+	ANSWERS_NOT_FOUND(4), 
+	COMPLETED_EXAM_NOT_FOUND(5);
 	
 	private final Integer code;
 	
