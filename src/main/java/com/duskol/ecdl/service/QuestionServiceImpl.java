@@ -1,15 +1,17 @@
-package com.duskol.edcl.service;
+package com.duskol.ecdl.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.duskol.edcl.dto.QuestionDto;
-import com.duskol.edcl.model.Question;
-import com.duskol.edcl.model.Test;
-import com.duskol.edcl.repository.QuestionRepository;
-import com.duskol.edcl.repository.TestRepository;
+import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
+import com.duskol.ecdl.dto.QuestionDTO;
+import com.duskol.ecdl.error.ErrorCodes;
+import com.duskol.ecdl.model.Question;
+import com.duskol.ecdl.model.Test;
+import com.duskol.ecdl.repository.QuestionRepository;
+import com.duskol.ecdl.repository.TestRepository;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -23,30 +25,32 @@ public class QuestionServiceImpl implements QuestionService {
 	QuestionRepository questionRepository; 
 	
 	@Override
-	public QuestionDto createQuestion(QuestionDto questionDto) {
+	public QuestionDTO createQuestion(Long testId, QuestionDTO questionDto) throws ResourceNotFoundException {
 		
-		logger.info("[Service] --> " + questionDto.toString());
+		Test test = testRepository.getOne(testId);
 		
-		Question q = new Question();
-		q.setName(questionDto.getText());
-		q.setType(questionDto.getType());
+		if(test == null)
+			throw new ResourceNotFoundException("Test id:" + testId + " not found!", ErrorCodes.TEST_NOT_FOUND);
+
 		
-		Test test = testRepository.getOne(questionDto.getTestId());
-		q.setTest(test);
+		Question question = new Question();
+		question.setName(questionDto.getText());
+		question.setType(questionDto.getType());
+		question.setTest(test);
 		
-		logger.info("test:" + q.getTest().toString());
+		Question savedQuestion = questionRepository.save(question);
 		
-		Question savedQuestion = questionRepository.save(q);
-		
-		QuestionDto newQ = new QuestionDto();
+		QuestionDTO newQ = new QuestionDTO();
 		newQ.setId(savedQuestion.getId());
-		newQ.setText(savedQuestion.getName());
-		newQ.setTestId(savedQuestion.getTest().getId());
+		newQ.setText(savedQuestion.getText());
+		newQ.setType(savedQuestion.getType());
 		
 		return newQ;
 	}
 
-	
-	
-
+	@Override
+	public Question getQuestion(Long id) {
+		
+		return questionRepository.getOne(id);
+	}
 }
