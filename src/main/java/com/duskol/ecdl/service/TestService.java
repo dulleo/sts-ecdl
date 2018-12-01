@@ -1,15 +1,14 @@
-package com.duskol.edcl.service;
+package com.duskol.ecdl.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
-import com.duskol.edcl.controller.exception.ResourceNotFoundException;
-import com.duskol.edcl.model.Test;
+import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
+import com.duskol.ecdl.dto.TestDTO;
+import com.duskol.ecdl.model.Test;
 
 public interface TestService {
 
-	Test createTest(Test test);
+	TestDTO createTest(TestDTO testDTO);
 
 	Test getTest(Long id) throws ResourceNotFoundException;
 
@@ -17,6 +16,6 @@ public interface TestService {
 
 	void deleteTest(Long id) throws ResourceNotFoundException;
 
-	Test editTest(@Valid Test test) throws ResourceNotFoundException;
+	Test editTest(Test test) throws ResourceNotFoundException;
 
 }
