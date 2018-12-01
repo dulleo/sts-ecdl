@@ -1,4 +1,4 @@
-package com.duskol.edcl.service;
+package com.duskol.ecdl.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,10 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.duskol.edcl.controller.exception.ResourceNotFoundException;
-import com.duskol.edcl.error.ErrorCodes;
-import com.duskol.edcl.model.Test;
-import com.duskol.edcl.repository.TestRepository;
+import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
+import com.duskol.ecdl.dto.TestDTO;
+import com.duskol.ecdl.error.ErrorCodes;
+import com.duskol.ecdl.model.Test;
+import com.duskol.ecdl.repository.TestRepository;
+import com.duskol.ecdl.utils.DTOToEntityConverter;
+import com.duskol.ecdl.utils.EntityToDTOConverter;
 
 /**
  * 
@@ -25,11 +28,23 @@ public class TestServiceImpl implements TestService {
 	
 	@Autowired
 	TestRepository testRepository;
+	
+	@Autowired
+	DTOToEntityConverter dtoToEntityConverter;
+	
+	@Autowired
+	EntityToDTOConverter entityToDTOConverter;
 
 	@Override
-	public Test createTest(Test test) {
-		logger.info("Test to save: " + test.toString());
-		return testRepository.save(test);
+	public TestDTO createTest(TestDTO testDTO) {
+		
+		Test test = dtoToEntityConverter.convert(testDTO);
+		
+		Test createdTest = testRepository.save(test);
+		
+		TestDTO createdTestDTO = entityToDTOConverter.convert(createdTest);//convertToDTO(savedTest);
+		
+		return createdTestDTO;
 	}
 
 	@Override
