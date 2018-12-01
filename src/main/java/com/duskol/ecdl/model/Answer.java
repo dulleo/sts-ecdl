@@ -1,4 +1,4 @@
-package com.duskol.edcl.model;
+package com.duskol.ecdl.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +25,11 @@ public class Answer {
 	private Long id;
 	
 	@NotBlank
-	@Column(name="name")
-	private String name;
+	@Column(name="text")
+	private String text;
+	
+	@Column(name="correct")
+	private Boolean isCorrect;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "question_id", nullable = false)
@@ -42,12 +45,12 @@ public class Answer {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getText() {
+		return text;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public Question getQuestion() {
@@ -58,6 +61,18 @@ public class Answer {
 		this.question = question;
 	}
 	
+	public Boolean getIsCorrect() {
+		return isCorrect;
+	}
+
+	public void setIsCorrect(Boolean isCorrect) {
+		this.isCorrect = isCorrect;
+	}
+
 	public Answer() {}
 
+	@Override
+	public String toString() {
+		return "Answer [id=" + id + ", text=" + text + ", isCorrect=" + isCorrect + ", question=" + question + "]";
+	}
 }
