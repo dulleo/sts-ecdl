@@ -1,4 +1,4 @@
-package com.duskol.edcl.controller;
+package com.duskol.ecdl.controller;
 
 import java.util.List;
 
@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.duskol.edcl.controller.exception.ResourceNotFoundException;
-import com.duskol.edcl.error.ErrorCodes;
-import com.duskol.edcl.error.ErrorResponse;
-import com.duskol.edcl.model.Test;
-import com.duskol.edcl.service.TestService;
+import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
+import com.duskol.ecdl.dto.TestDTO;
+import com.duskol.ecdl.error.ErrorCodes;
+import com.duskol.ecdl.error.ErrorResponse;
+import com.duskol.ecdl.model.Test;
+import com.duskol.ecdl.service.TestService;
 
 @RestController
 @RequestMapping(value="/ecdl/tests")
@@ -36,9 +37,11 @@ public class TestController {
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value=HttpStatus.CREATED)
-	public Test createTest(@RequestBody @Valid Test test) {
-		logger.info("Save test called....");
-		return testService.createTest(test);
+	public TestDTO createTest(@RequestBody @Valid TestDTO testDTO) {
+		logger.info("TestDTO to save: " + testDTO.toString());
+		TestDTO createdTestDTO = testService.createTest(testDTO);
+		logger.info("TestDTO to save: " + createdTestDTO.toString());
+		return createdTestDTO;
 	}
 	
 	@PutMapping(consumes = "application/json", produces = "application/json")
@@ -75,6 +78,4 @@ public class TestController {
 		ErrorCodes errorCode = e.getErrorCode();
 		return new ErrorResponse(errorCode.getCode(), e.getMessage());
 	}
-	
-	
 }
