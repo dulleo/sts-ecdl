@@ -1,4 +1,4 @@
-package com.duskol.edcl.error;
+package com.duskol.ecdl.error;
 
 public class ErrorResponse {
 	
