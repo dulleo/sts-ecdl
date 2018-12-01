@@ -1,8 +1,9 @@
-package com.duskol.edcl.model;
+package com.duskol.ecdl.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * 
  * Created by duskol on Nov 2, 2018
@@ -18,6 +22,9 @@ import javax.validation.constraints.NotBlank;
  */
 @Entity
 @Table(name="questions")
+//Problem with lazy loading via the hibernate proxy object. 
+//Got around it by annotating the class having lazy loaded private properties with:
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Question {
 	
 	@Id
@@ -25,23 +32,16 @@ public class Question {
 	private Long id;
 	
 	@NotBlank
-	@Column(name="name")
-	private String name;
+	@Column(name="text")
+	private String text;
 	
 	@Column(name="type")
+	@Enumerated(EnumType.STRING)
 	private QuestionType type;
 	
-	public QuestionType getType() {
-		return type;
-	}
-
-	public void setType(QuestionType type) {
-		this.type = type;
-	}
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne//(fetch = FetchType.LAZY)
 	@JoinColumn(name = "test_id", nullable = false)
-	//@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore 
 	private Test test;
 
 	public Long getId() {
@@ -52,16 +52,24 @@ public class Question {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getText() {
+		return this.text;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String text) {
+		this.text = text;
+	}
+	
+	public QuestionType getType() {
+		return this.type;
+	}
+
+	public void setType(QuestionType type) {
+		this.type = type;
 	}
 	
 	public Test getTest() {
-		return test;
+		return this.test;
 	}
 
 	public void setTest(Test test) {
