@@ -1,8 +1,12 @@
-package com.duskol.edcl.service;
+package com.duskol.ecdl.service;
 
-import com.duskol.edcl.dto.QuestionDto;
+import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
+import com.duskol.ecdl.dto.QuestionDTO;
+import com.duskol.ecdl.model.Question;
 
 public interface QuestionService {
 	
-	QuestionDto createQuestion(QuestionDto questionDto);
+	QuestionDTO createQuestion(Long id, QuestionDTO questionDto) throws ResourceNotFoundException;
+
+	Question getQuestion(Long id);
 }
