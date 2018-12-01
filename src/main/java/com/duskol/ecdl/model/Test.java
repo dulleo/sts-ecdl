@@ -1,5 +1,7 @@
-package com.duskol.edcl.model;
+package com.duskol.ecdl.model;
 
+
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +27,50 @@ public class Test {
 	@NotBlank
 	@Column(name="name", unique=true)
 	private String name;
+	
+	@Column(name="duration")
+	private Integer duration;
+	
+	@Column(name="passing_limit")
+	private BigDecimal passingLimit;
+	
+	@Column(name="active")
+	private Boolean isActive;
+	
+	@Column(name="total_exam_questions")
+	private Integer totalExamQuestions;
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+
+	public BigDecimal getPassingLimit() {
+		return passingLimit;
+	}
+
+	public void setPassingLimit(BigDecimal passingLimit) {
+		this.passingLimit = passingLimit;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public Integer getTotalExamQuestions() {
+		return totalExamQuestions;
+	}
+
+	public void setTotalExamQuestions(Integer totalExamQuestions) {
+		this.totalExamQuestions = totalExamQuestions;
+	}
 
 	public Long getId() {
 		return id;
@@ -46,6 +92,7 @@ public class Test {
 
 	@Override
 	public String toString() {
-		return "Test [id=" + id + ", name=" + name + "]";
+		return "Test [id=" + id + ", name=" + name + ", duration=" + duration + ", passingLimit=" + passingLimit
+				+ ", isActive=" + isActive + ", totalExamQuestion=" + totalExamQuestions + "]";
 	}
 }
