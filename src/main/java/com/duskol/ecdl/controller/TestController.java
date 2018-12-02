@@ -55,9 +55,11 @@ public class TestController {
 	
 	@GetMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public Test getTest(@PathVariable Long id) throws ResourceNotFoundException {
-        logger.info("Get test called....");
-        return testService.getTest(id);
+    public TestDTO getTest(@PathVariable Long id) throws ResourceNotFoundException {
+        logger.info("Get testDTO id: " + id);
+        TestDTO testDTO = testService.getTest(id);
+        logger.info("TestDTO: " + testDTO.toString());
+        return testDTO;
 	}
 	
 	@GetMapping()
