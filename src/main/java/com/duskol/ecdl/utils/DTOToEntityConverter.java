@@ -71,4 +71,19 @@ public class DTOToEntityConverter {
 		c.setPassingLimit(completedExamDTO.getPassingLimit());
 		return c;
 	}
+
+	/**
+	 * 
+	 * @param testDTO
+	 * @param test
+	 */
+	public void convert(TestDTO testDTO, Test test) {
+		if(testDTO != null)
+			test.setId(testDTO.getId());
+		test.setName(testDTO.getName());
+		test.setDuration(testDTO.getDuration());
+		test.setIsActive(testDTO.getIsActive());
+		test.setPassingLimit(testDTO.getPassingLimit());
+		test.setTotalExamQuestions(testDTO.getTotalExamQuestions());
+	}
 }
