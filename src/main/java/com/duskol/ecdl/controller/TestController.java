@@ -38,17 +38,19 @@ public class TestController {
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value=HttpStatus.CREATED)
 	public TestDTO createTest(@RequestBody @Valid TestDTO testDTO) {
-		logger.info("TestDTO to save: " + testDTO.toString());
+		logger.info("Save testDTO: " + testDTO.toString());
 		TestDTO createdTestDTO = testService.createTest(testDTO);
-		logger.info("TestDTO to save: " + createdTestDTO.toString());
+		logger.info("Saved testDTO: " + createdTestDTO.toString());
 		return createdTestDTO;
 	}
 	
 	@PutMapping(consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value=HttpStatus.CREATED)
-	public Test editTest(@RequestBody @Valid Test test) throws ResourceNotFoundException {
-		logger.info("Edit test called....");
-		return testService.editTest(test);
+	public TestDTO updateTest(@RequestBody @Valid TestDTO testDTO) throws ResourceNotFoundException {
+		logger.info("Update testDTO: " + testDTO.toString());
+		TestDTO updatedTestDTO = testService.updateTest(testDTO);
+		logger.info("Updated testDTO: " + testDTO.toString());
+		return updatedTestDTO;
 	}
 	
 	@GetMapping("/{id}")
