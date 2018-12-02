@@ -73,7 +73,7 @@ public class TestController {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(value=HttpStatus.NO_CONTENT)
 	public void deleteTest(@PathVariable Long id) throws ResourceNotFoundException {
-		logger.info("Delete test called...");
+		logger.info("Delete test id: " + id);
 		testService.deleteTest(id);
 	}
 	
