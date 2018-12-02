@@ -10,7 +10,7 @@ public interface TestService {
 
 	TestDTO createTest(TestDTO testDTO);
 
-	Test getTest(Long id) throws ResourceNotFoundException;
+	TestDTO getTest(Long id) throws ResourceNotFoundException;
 
 	List<Test> getTests();
 
