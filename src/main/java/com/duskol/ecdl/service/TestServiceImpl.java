@@ -45,9 +45,15 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public Test getTest(Long id) throws ResourceNotFoundException {
-		return testRepository.findById(id)
-				.orElseThrow(()-> new ResourceNotFoundException("Test id:" + id + " not found!", ErrorCodes.TEST_NOT_FOUND));
+	public TestDTO getTest(Long id) throws ResourceNotFoundException {
+		
+		Test test = testRepository.getOne(id);
+		if(test==null)
+			throw new ResourceNotFoundException("Test id:" + id + " not found!", ErrorCodes.TEST_NOT_FOUND);
+		
+		TestDTO testDTO = new TestDTO();
+		entityToDTOConverter.convert(test, testDTO);
+		return testDTO;
 	}
 
 	@Override
