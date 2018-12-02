@@ -16,6 +16,6 @@ public interface TestService {
 
 	void deleteTest(Long id) throws ResourceNotFoundException;
 
-	Test editTest(Test test) throws ResourceNotFoundException;
+	TestDTO updateTest(TestDTO testDTO) throws ResourceNotFoundException;
 
 }
