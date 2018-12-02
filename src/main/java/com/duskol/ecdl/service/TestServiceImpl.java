@@ -3,8 +3,6 @@ package com.duskol.ecdl.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +22,6 @@ import com.duskol.ecdl.utils.EntityToDTOConverter;
 @Service
 public class TestServiceImpl implements TestService {
 	
-	private final static Logger logger = LoggerFactory.getLogger(TestServiceImpl.class);
-	
 	@Autowired
 	TestRepository testRepository;
 	
@@ -38,11 +34,12 @@ public class TestServiceImpl implements TestService {
 	@Override
 	public TestDTO createTest(TestDTO testDTO) {
 		
-		Test test = dtoToEntityConverter.convert(testDTO);
+		Test test = new Test();
+		dtoToEntityConverter.convert(testDTO, test);
 		
 		Test createdTest = testRepository.save(test);
-		
-		TestDTO createdTestDTO = entityToDTOConverter.convert(createdTest);//convertToDTO(savedTest);
+		TestDTO createdTestDTO = new TestDTO();
+		entityToDTOConverter.convert(createdTest, createdTestDTO);
 		
 		return createdTestDTO;
 	}
@@ -71,18 +68,19 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public Test editTest(Test test) throws ResourceNotFoundException {
-
-		logger.info("Test to edit: " + test.toString());
+	public TestDTO updateTest(TestDTO testDTO) throws ResourceNotFoundException {
 		
-		Optional<Test> optional = testRepository.findById(test.getId());
+		Test test = testRepository.getOne(testDTO.getId());
 		
-		if(!optional.isPresent())
-			throw new ResourceNotFoundException("Test id:" + test.getId() + " not found!", ErrorCodes.TEST_NOT_FOUND);
+		if(test==null)
+			throw new ResourceNotFoundException("Test id:" + testDTO.getId() + " not found!", ErrorCodes.TEST_NOT_FOUND);
 		
-		Test t = new Test();
-		t.setId(test.getId());
-		t.setName(test.getName());
-		return testRepository.save(t);
+		dtoToEntityConverter.convert(testDTO, test);
+		
+		Test updatedTest = testRepository.save(test);
+		TestDTO updatedTestDTO = new TestDTO();
+		entityToDTOConverter.convert(updatedTest, updatedTestDTO);
+		
+		return updatedTestDTO;
 	}
 }
