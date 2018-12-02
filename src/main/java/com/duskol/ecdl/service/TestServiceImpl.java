@@ -58,6 +58,7 @@ public class TestServiceImpl implements TestService {
 
 	@Override
 	public List<TestDTO> getTests() throws ResourceNotFoundException {
+		
 		List<Test> tests = testRepository.findAll();
 		if(tests == null) //proveri da li vraca null ili prazan niz
 			throw new ResourceNotFoundException("Database does not contains tests!", ErrorCodes.TESTS_NOT_FOUND);
@@ -77,7 +78,6 @@ public class TestServiceImpl implements TestService {
 	public void deleteTest(Long id) throws ResourceNotFoundException {
 		
 		Test test = testRepository.getOne(id);
-		
 		if(test == null)
 			throw new ResourceNotFoundException("Test id:" + id + " not found!", ErrorCodes.TEST_NOT_FOUND);
 		
@@ -88,7 +88,6 @@ public class TestServiceImpl implements TestService {
 	public TestDTO updateTest(TestDTO testDTO) throws ResourceNotFoundException {
 		
 		Test test = testRepository.getOne(testDTO.getId());
-		
 		if(test==null)
 			throw new ResourceNotFoundException("Test id:" + testDTO.getId() + " not found!", ErrorCodes.TEST_NOT_FOUND);
 		
