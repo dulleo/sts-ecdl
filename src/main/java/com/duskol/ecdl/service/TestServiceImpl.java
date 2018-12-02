@@ -1,5 +1,6 @@
 package com.duskol.ecdl.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,8 +58,20 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public List<Test> getTests() {
-		return testRepository.findAll();
+	public List<TestDTO> getTests() throws ResourceNotFoundException {
+		List<Test> tests = testRepository.findAll();
+		if(tests == null) //proveri da li vraca null ili prazan niz
+			throw new ResourceNotFoundException("Database does not contains tests!", ErrorCodes.TESTS_NOT_FOUND);
+		
+		List<TestDTO> dtos = new ArrayList<>();
+		
+		for(Test test: tests) {
+			TestDTO testDTO = new TestDTO();
+			entityToDTOConverter.convert(test, testDTO);
+			dtos.add(testDTO);
+		}
+		
+		return dtos;
 	}
 
 	@Override
