@@ -23,7 +23,6 @@ import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
 import com.duskol.ecdl.dto.TestDTO;
 import com.duskol.ecdl.error.ErrorCodes;
 import com.duskol.ecdl.error.ErrorResponse;
-import com.duskol.ecdl.model.Test;
 import com.duskol.ecdl.service.TestService;
 
 @RestController
@@ -64,9 +63,11 @@ public class TestController {
 	
 	@GetMapping()
 	@ResponseStatus(value=HttpStatus.OK)
-	public List<Test> getTests() {
+	public List<TestDTO> getTests() throws ResourceNotFoundException {
 		logger.info("Get tests called....");
-		return testService.getTests();
+		List<TestDTO> testDTOs = testService.getTests();
+		logger.info("Tests: " + testDTOs.toString());
+		return testDTOs;
 	}
 	
 	@DeleteMapping("/{id}")
