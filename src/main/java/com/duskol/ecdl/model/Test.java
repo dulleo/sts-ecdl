@@ -2,12 +2,15 @@ package com.duskol.ecdl.model;
 
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -22,6 +25,7 @@ public class Test {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id", updatable=false, nullable=false)
 	private Long id;
 	
 	@NotBlank
@@ -34,11 +38,18 @@ public class Test {
 	@Column(name="passing_limit")
 	private BigDecimal passingLimit;
 	
-	@Column(name="active")
-	private Boolean isActive;
+	@Column(name="status")
+	private String status;
 	
 	@Column(name="total_exam_questions")
 	private Integer totalExamQuestions;
+	
+	@OneToMany(mappedBy="test")
+	private List<Question> questions = new ArrayList<>();
+
+	public List<Question> getQuestions() {
+		return questions;
+	}
 
 	public Integer getDuration() {
 		return duration;
@@ -56,12 +67,12 @@ public class Test {
 		this.passingLimit = passingLimit;
 	}
 
-	public Boolean getIsActive() {
-		return isActive;
+	public String getStatus() {
+		return this.status;
 	}
 
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Integer getTotalExamQuestions() {
@@ -88,11 +99,16 @@ public class Test {
 		this.name = name;
 	}
 	
-	public Test() {}
+	public Test() {
+		
+	}
 
 	@Override
 	public String toString() {
 		return "Test [id=" + id + ", name=" + name + ", duration=" + duration + ", passingLimit=" + passingLimit
-				+ ", isActive=" + isActive + ", totalExamQuestion=" + totalExamQuestions + "]";
+				+ ", status=" + status + ", totalExamQuestions=" + totalExamQuestions + ", questions=" + questions
+				+ "]";
 	}
+
+	
 }
