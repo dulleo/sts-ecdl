@@ -1,44 +1,86 @@
 package com.duskol.ecdl.service;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
 import com.duskol.ecdl.dto.AnswerDTO;
-import com.duskol.ecdl.error.ErrorCodes;
 import com.duskol.ecdl.model.Answer;
 import com.duskol.ecdl.model.Question;
-import com.duskol.ecdl.repository.AnswerRepository;
-import com.duskol.ecdl.repository.QuestionRepository;
+import com.duskol.ecdl.repository.RepositoryContainer;
+import com.duskol.ecdl.utils.DTOToEntityConverter;
+import com.duskol.ecdl.utils.EntityToDTOConverter;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
 	
 	@Autowired
-	QuestionRepository questionRepository;
+	RepositoryContainer repositoryContainer;
 	
 	@Autowired
-	AnswerRepository answerRepository;
+	DTOToEntityConverter dtoToEntityConverter;
+	
+	@Autowired
+	EntityToDTOConverter entityToDTOConverter;
 
 	@Override
-	public void createAnswers(Long id, @Valid List<AnswerDTO> answersDto) throws ResourceNotFoundException {
+	public void createAnswers(Question savedQuestion, List<AnswerDTO> answersDTO) throws ResourceNotFoundException {
 		
-		Question question = questionRepository.getOne(id);
+		List<Answer> answers = new ArrayList<>();
 		
-		if(question == null)
-			throw new ResourceNotFoundException("Question id:" + id + " not found!", ErrorCodes.QUESTION_NOT_FOUND);
+		for (AnswerDTO answerDTO : answersDTO) {
+			Answer answer = new Answer();
+			dtoToEntityConverter.convert(answerDTO, answer);
+			answer.setQuestion(savedQuestion);
+			answers.add(answer);
+		}
 		
-		answersDto.stream().forEach(answerDto->{
-			Answer a = new Answer();
-			a.setIsCorrect(answerDto.getIsCorrect());
-			a.setText(answerDto.getText());
-			a.setQuestion(question);
-			answerRepository.save(a);
-		});
+		repositoryContainer.getAnswerRepository().saveAll(answers);
 	}
 
+	/**
+	 * 
+	 */
+	@Override
+	public void deleteAnswers(Long questionId) {
+		List<Answer> answers = repositoryContainer.getAnswerRepository().findByQuestionId(questionId);
+		repositoryContainer.getAnswerRepository().deleteAll(answers);
+	}
+
+	@Override
+	public List<AnswerDTO> getAnswers(Long questionId) {
+		
+		List<Answer> answers = repositoryContainer.getAnswerRepository().findByQuestionId(questionId);
+		
+		List<AnswerDTO> answerDTOs = new ArrayList<>();
+		
+		answers.stream().forEach(a -> {
+			AnswerDTO dto = new AnswerDTO();
+			entityToDTOConverter.convert(a, dto);
+			answerDTOs.add(dto);
+		});
+
+		return answerDTOs;
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public void editAnswers(Question question, List<AnswerDTO> answerDTOs) {
+		
+		List<Answer> answers = repositoryContainer.getAnswerRepository().findByQuestionId(question.getId());
+		
+		answerDTOs.stream().forEach(dto -> {
+			Answer entity = answers.stream().filter(answer -> dto.getId().longValue() == answer.getId().longValue())
+				.findFirst().get();
+			
+			dtoToEntityConverter.convert(dto, entity);	
+			repositoryContainer.getAnswerRepository().save(entity);
+		});
+		
+	}
 }
