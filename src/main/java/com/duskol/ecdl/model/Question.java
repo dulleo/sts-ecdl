@@ -29,6 +29,7 @@ public class Question {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="id", updatable=false, nullable=false)
 	private Long id;
 	
 	@NotBlank
@@ -56,7 +57,7 @@ public class Question {
 		return this.text;
 	}
 
-	public void setName(String text) {
+	public void setText(String text) {
 		this.text = text;
 	}
 	
