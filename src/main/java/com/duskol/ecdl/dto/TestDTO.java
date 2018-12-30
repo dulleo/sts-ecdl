@@ -3,6 +3,7 @@ package com.duskol.ecdl.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.duskol.ecdl.model.TestStatus;
 
 /**
  * 
@@ -17,9 +18,16 @@ public class TestDTO implements Serializable {
 	private String name;
 	private Integer duration;
 	private BigDecimal passingLimit;
-	private Boolean isActive;
+	private TestStatus status;
 	private Integer totalExamQuestions;
+	private Integer totalQuestions;
 	
+	public Integer getTotalQuestions() {
+		return totalQuestions;
+	}
+	public void setTotalQuestions(Integer totalQuestions) {
+		this.totalQuestions = totalQuestions;
+	}
 	public Integer getDuration() {
 		return duration;
 	}
@@ -32,11 +40,11 @@ public class TestDTO implements Serializable {
 	public void setPassingLimit(BigDecimal passingLimit) {
 		this.passingLimit = passingLimit;
 	}
-	public Boolean getIsActive() {
-		return isActive;
+	public TestStatus getStatus() {
+		return status;
 	}
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
+	public void setStatus(TestStatus status) {
+		this.status  = status;
 	}
 	public Integer getTotalExamQuestions() {
 		return totalExamQuestions;
@@ -58,7 +66,8 @@ public class TestDTO implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return " [id=" + id + ", name=" + name + ", duration=" + duration + ", passingLimit=" + passingLimit
-				+ ", isActive=" + isActive + ", totalExamQuestion=" + totalExamQuestions + "]";
+		return "TestDTO [id=" + id + ", name=" + name + ", duration=" + duration + ", passingLimit=" + passingLimit
+				+ ", status=" + status + ", totalExamQuestions=" + totalExamQuestions + ", totalQuestions="
+				+ totalQuestions + "]";
 	}
 }
