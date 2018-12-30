@@ -37,6 +37,6 @@ public class AnswerDTO implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "AnswerDto [id=" + id + ", text=" + text + ", isCorrect=" + isCorrect + "]";
+		return "[id=" + id + ", text=" + text + ", isCorrect=" + isCorrect + "]";
 	}
 }
