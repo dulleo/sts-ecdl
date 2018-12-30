@@ -32,7 +32,7 @@ public class AnswerController {
 	@ResponseStatus(value=HttpStatus.CREATED)
 	public void createAnswers(@PathVariable Long id, @RequestBody @Valid List<AnswerDTO> answers) throws ResourceNotFoundException {
 		logger.info("Create answers:" + answers.toString());
-		answerService.createAnswers(id, answers);
+		//answerService.createAnswers(id, answers);
 	}
 
 }
