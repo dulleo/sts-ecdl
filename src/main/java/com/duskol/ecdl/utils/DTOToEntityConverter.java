@@ -5,10 +5,14 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
+import com.duskol.ecdl.dto.AnswerDTO;
 import com.duskol.ecdl.dto.CompletedExamDTO;
+import com.duskol.ecdl.dto.QuestionDTO;
 import com.duskol.ecdl.dto.TestDTO;
+import com.duskol.ecdl.model.Answer;
 import com.duskol.ecdl.model.CompletedExam;
 import com.duskol.ecdl.model.CompletedExamStatus;
+import com.duskol.ecdl.model.Question;
 import com.duskol.ecdl.model.Test;
 
 /**
@@ -18,18 +22,6 @@ import com.duskol.ecdl.model.Test;
  */
 @Component
 public class DTOToEntityConverter {
-
-	public Test convert(TestDTO testDTO) {
-		
-		Test t = new Test();
-		t.setDuration(testDTO.getDuration());
-		t.setIsActive(testDTO.getIsActive());
-		t.setName(testDTO.getName());
-		t.setPassingLimit(testDTO.getPassingLimit());
-		t.setTotalExamQuestions(testDTO.getTotalExamQuestions());
-		
-		return t;
-	}
 
 	/**
 	 * 
@@ -78,12 +70,36 @@ public class DTOToEntityConverter {
 	 * @param test
 	 */
 	public void convert(TestDTO testDTO, Test test) {
+		/*
 		if(testDTO != null)
-			test.setId(testDTO.getId());
+			test.setId(testDTO.getId());*/
 		test.setName(testDTO.getName());
 		test.setDuration(testDTO.getDuration());
-		test.setIsActive(testDTO.getIsActive());
+		test.setStatus(testDTO.getStatus().getStatus());
 		test.setPassingLimit(testDTO.getPassingLimit());
 		test.setTotalExamQuestions(testDTO.getTotalExamQuestions());
+	}
+
+	/**
+	 * 
+	 * @param answerDTO
+	 * @param answer
+	 */
+	public void convert(AnswerDTO answerDTO, Answer answer) {
+		/**
+		if(answerDTO.getId() != null)
+			answer.setId(answerDTO.getId());*/
+		answer.setIsCorrect(answerDTO.getIsCorrect());
+		answer.setText(answerDTO.getText());
+	}
+
+	/**
+	 * 
+	 * @param questionDTO
+	 * @param question
+	 */
+	public void convert(QuestionDTO questionDTO, Question question) {
+		question.setText(questionDTO.getText());
+		question.setType(questionDTO.getType());
 	}
 }
