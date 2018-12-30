@@ -3,6 +3,7 @@ package com.duskol.ecdl.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,18 +37,18 @@ public class TestController {
 	
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value=HttpStatus.CREATED)
-	public TestDTO createTest(@RequestBody @Valid TestDTO testDTO) {
-		logger.info("Save testDTO: " + testDTO.toString());
+	public TestDTO createTest(@RequestBody @Valid @NotNull TestDTO testDTO) {
+		logger.info("Save " + testDTO.toString());
 		TestDTO createdTestDTO = testService.createTest(testDTO);
-		logger.info("Saved testDTO: " + createdTestDTO.toString());
+		logger.info("Saved " + createdTestDTO.toString());
 		return createdTestDTO;
 	}
 	
 	@PutMapping(consumes = "application/json", produces = "application/json")
-	@ResponseStatus(value=HttpStatus.CREATED)
-	public TestDTO updateTest(@RequestBody @Valid TestDTO testDTO) throws ResourceNotFoundException {
+	@ResponseStatus(value=HttpStatus.NO_CONTENT)
+	public TestDTO editTest(@RequestBody @Valid @NotNull TestDTO testDTO) throws ResourceNotFoundException {
 		logger.info("Update testDTO: " + testDTO.toString());
-		TestDTO updatedTestDTO = testService.updateTest(testDTO);
+		TestDTO updatedTestDTO = testService.editTest(testDTO);
 		logger.info("Updated testDTO: " + testDTO.toString());
 		return updatedTestDTO;
 	}
@@ -55,9 +56,9 @@ public class TestController {
 	@GetMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public TestDTO getTest(@PathVariable Long id) throws ResourceNotFoundException {
-        logger.info("Get testDTO id: " + id);
+        logger.info("Get test with id: " + id);
         TestDTO testDTO = testService.getTest(id);
-        logger.info("TestDTO: " + testDTO.toString());
+        logger.info(testDTO.toString());
         return testDTO;
 	}
 	
