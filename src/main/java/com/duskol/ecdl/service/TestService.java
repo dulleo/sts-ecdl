@@ -7,7 +7,7 @@ import com.duskol.ecdl.dto.TestDTO;
 
 public interface TestService {
 
-	TestDTO createTest(TestDTO testDTO);
+	void createTest(TestDTO testDTO);
 
 	TestDTO getTest(Long id) throws ResourceNotFoundException;
 
