@@ -2,11 +2,13 @@ package com.duskol.ecdl.exception;
 
 import com.duskol.ecdl.error.ErrorCodes;
 
+/**
+ * 
+ * Created by Dusko Lucic on Dec 31, 2018
+ *
+ */
 public class NotFoundException extends Exception {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 7521222622700745548L;
 	private ErrorCodes errorCode;
 	
@@ -46,5 +48,4 @@ public class NotFoundException extends Exception {
 	public void setErrorCode(ErrorCodes errorCode) {
 		this.errorCode = errorCode;
 	}
-
 }
