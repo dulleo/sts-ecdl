@@ -63,7 +63,7 @@ public class TestServiceImpl implements TestService {
 	public List<TestDTO> getTests() throws ResourceNotFoundException {
 		
 		List<Test> tests = repositoryContainer.getTestRepository().findAll();
-		if(tests == null) //proveri da li vraca null ili prazan niz - ovo mozda ne bi trbalo da je greska
+		if(tests.isEmpty()) 
 			throw new ResourceNotFoundException("Database does not contains tests!", ErrorCodes.TESTS_NOT_FOUND);
 		
 		List<TestDTO> dtos = new ArrayList<>();
