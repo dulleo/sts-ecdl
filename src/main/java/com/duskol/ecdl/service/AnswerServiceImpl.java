@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
 import com.duskol.ecdl.dto.AnswerDTO;
+import com.duskol.ecdl.exception.ResourceNotFoundException;
 import com.duskol.ecdl.model.Answer;
 import com.duskol.ecdl.model.Question;
 import com.duskol.ecdl.repository.RepositoryContainer;
