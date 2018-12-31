@@ -7,7 +7,8 @@ public enum ErrorCodes {
 	QUESTIONS_NOT_FOUND(3), 
 	ANSWERS_NOT_FOUND(4), 
 	COMPLETED_EXAM_NOT_FOUND(5), 
-	TESTS_NOT_FOUND(6);
+	TESTS_NOT_FOUND(6), 
+	TEST_CAN_NOT_BE_CREATED(7);
 	
 	private final Integer code;
 	
