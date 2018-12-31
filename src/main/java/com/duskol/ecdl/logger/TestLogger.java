@@ -26,7 +26,7 @@ public class TestLogger {
 	private static final Logger logger = LoggerFactory.getLogger(TestLogger.class);
 	private static final String MESSAGE_FORMAT = "Method {} unsuccessfully finished. ERROR: {} - {}";
 	
-	@Pointcut("execution(void com.duskol.ecdl.controller.TestController.createTest(com.duskol.ecdl.dto.TestDTO) "
+	@Pointcut("execution(void com.duskol.ecdl.controller.TestController.createTest(com.duskol.ecdl.dto.TestDTO)) "
 			+ "&& args(testDTO)")
 	public void createTestPointcut(com.duskol.ecdl.dto.TestDTO testDTO) {
 		//
