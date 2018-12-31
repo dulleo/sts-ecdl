@@ -40,16 +40,11 @@ public class TestServiceImpl implements TestService {
 	QuestionService questionService;
 
 	@Override
-	public TestDTO createTest(TestDTO testDTO) {
+	public void createTest(TestDTO testDTO) {
 		
 		Test test = new Test();
 		dtoToEntityConverter.convert(testDTO, test);
-		
-		Test createdTest = repositoryContainer.getTestRepository().save(test);
-		TestDTO createdTestDTO = new TestDTO();
-		entityToDTOConverter.convert(createdTest, createdTestDTO);
-		
-		return createdTestDTO;
+		repositoryContainer.getTestRepository().save(test);
 	}
 
 	@Override
