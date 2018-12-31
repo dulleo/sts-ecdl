@@ -9,9 +9,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
 import com.duskol.ecdl.dto.TestDTO;
 import com.duskol.ecdl.error.ErrorCodes;
+import com.duskol.ecdl.exception.ResourceNotFoundException;
 import com.duskol.ecdl.model.Question;
 import com.duskol.ecdl.model.Test;
 import com.duskol.ecdl.repository.RepositoryContainer;
