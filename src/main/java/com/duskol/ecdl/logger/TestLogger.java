@@ -19,6 +19,11 @@ import com.duskol.ecdl.exception.InternalException;
 import com.duskol.ecdl.exception.NotFoundException;
 import com.duskol.ecdl.exception.ResourceNotFoundException;
 
+/**
+ * 
+ * Created by Dusko Lucic on Dec 31, 2018
+ *
+ */
 @Aspect
 @Component
 public class TestLogger {
