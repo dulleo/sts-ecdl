@@ -95,7 +95,7 @@ public class TestServiceImpl implements TestService {
 
 	
 	@Override
-	public TestDTO editTest(TestDTO testDTO) throws ResourceNotFoundException {
+	public void editTest(TestDTO testDTO) throws ResourceNotFoundException {
 		
 		Optional<Test> testOpt = repositoryContainer.getTestRepository().findById(testDTO.getId());
 		if (!testOpt.isPresent())
@@ -103,11 +103,6 @@ public class TestServiceImpl implements TestService {
 		
 		Test test = testOpt.get();
 		dtoToEntityConverter.convert(testDTO, test);
-		Test updatedTest = repositoryContainer.getTestRepository().save(test);
-		
-		TestDTO updatedTestDTO = new TestDTO();
-		entityToDTOConverter.convert(updatedTest, updatedTestDTO);
-		
-		return updatedTestDTO;
+		repositoryContainer.getTestRepository().save(test);
 	}
 }
