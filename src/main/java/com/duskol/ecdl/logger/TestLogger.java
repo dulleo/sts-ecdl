@@ -23,7 +23,7 @@ import com.duskol.ecdl.exception.ResourceNotFoundException;
 @Component
 public class TestLogger {
 	
-	private static final Logger logger = LoggerFactory.getLogger(TestLogger.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestLogger.class);
 	private static final String MESSAGE_FORMAT = "Method {} unsuccessfully finished. ERROR: {} - {}";
 	
 	@Pointcut("execution(void com.duskol.ecdl.controller.TestController.createTest(com.duskol.ecdl.dto.TestDTO)) "
@@ -33,18 +33,18 @@ public class TestLogger {
 	}
 	
 	@Around("createTestPointcut(testDTO)")
-	public void updateItems(ProceedingJoinPoint jp, com.duskol.ecdl.dto.TestDTO testDTO) throws Throwable {
+	public void createTest(ProceedingJoinPoint jp, com.duskol.ecdl.dto.TestDTO testDTO) throws Throwable {
 		
 		String methodName = jp.getSignature().getName();
 		String args = Arrays.toString(jp.getArgs()); 
 		
 		try {
-			logger.info("Method {} has started", methodName);
+			LOGGER.info("Method {} has started", methodName);
 			//Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			//logger.info("Method " + UPDATE_MERCHANT_ITEMS_METHOD_NAME +  " requested by user: " + authentication.getName() + "-" + authentication.getAuthorities());
-			logger.info("Args: {}",args);
+			LOGGER.info("Args: {}",args);
 			jp.proceed();
-			logger.info("Method {} succesfully successfully finished.......", methodName);
+			LOGGER.info("Method {} succesfully successfully finished.......", methodName);
 		} catch (ResourceNotFoundException e) {
 			getNotFoundError(e, ErrorCodes.TEST_CAN_NOT_BE_CREATED, methodName);
 		} catch (DataIntegrityViolationException e) {
@@ -57,7 +57,7 @@ public class TestLogger {
 	}
 	
 	private void getNotFoundError(Exception e, ErrorCodes errorCodes, String methodName) throws NotFoundException {
-		logger.error(MESSAGE_FORMAT, methodName, e.getMessage(),e);
+		LOGGER.error(MESSAGE_FORMAT, methodName, e.getMessage(),e);
 		throw new NotFoundException(e.getMessage(), errorCodes);
 	}
 	
@@ -73,16 +73,16 @@ public class TestLogger {
 		if(e.getCause() instanceof JDBCException && ((JDBCException)e.getCause()).getSQLException() != null)
         {                    
 			String message = ((JDBCException)e.getCause()).getSQLException().getMessage();
-			logger.error(MESSAGE_FORMAT,methodName,message,e);
+			LOGGER.error(MESSAGE_FORMAT,methodName,message,e);
             throw new DataIntegrityException(message, errorCodes);
         } else {
-            logger.error(MESSAGE_FORMAT,methodName,e.getMessage(), e);
+        	LOGGER.error(MESSAGE_FORMAT,methodName,e.getMessage(), e);
             throw new DataIntegrityException(e.getMessage(), errorCodes); 
         }
 	}
 	
 	private void getInternalError(Exception e, ErrorCodes errorCodes, String methodName) throws InternalException {
-		logger.error(MESSAGE_FORMAT, methodName, e.getMessage(), e);
+		LOGGER.error(MESSAGE_FORMAT, methodName, e.getMessage(), e);
 		throw new InternalException(e.getMessage(), errorCodes);
 	}
 }
