@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.duskol.ecdl.dto.TestDTO;
 import com.duskol.ecdl.error.ErrorCodes;
 import com.duskol.ecdl.error.ErrorResponse;
+import com.duskol.ecdl.exception.DataIntegrityException;
+import com.duskol.ecdl.exception.InternalException;
+import com.duskol.ecdl.exception.NotFoundException;
 import com.duskol.ecdl.exception.ResourceNotFoundException;
 import com.duskol.ecdl.service.TestService;
 
@@ -34,18 +37,13 @@ public class TestController {
 	@PostMapping(consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value=HttpStatus.CREATED)
 	public void createTest(@RequestBody @Valid @NotNull TestDTO testDTO) {
-		//logger.info("Save {}", testDTO.toString());
 		testService.createTest(testDTO);
-		//logger.info("Saved " + createdTestDTO.toString());
 	}
 	
 	@PutMapping(consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value=HttpStatus.NO_CONTENT)
-	public TestDTO editTest(@RequestBody @Valid @NotNull TestDTO testDTO) throws ResourceNotFoundException {
-		//logger.info("Update testDTO: " + testDTO.toString());
-		TestDTO updatedTestDTO = testService.editTest(testDTO);
-		//logger.info("Updated testDTO: " + testDTO.toString());
-		return updatedTestDTO;
+	public void editTest(@RequestBody @Valid @NotNull TestDTO testDTO) throws ResourceNotFoundException {
+		testService.editTest(testDTO);
 	}
 	
 	@GetMapping("/{id}")
@@ -73,9 +71,23 @@ public class TestController {
 		testService.deleteTest(id);
 	}
 	
-	@ExceptionHandler(ResourceNotFoundException.class)
+	@ExceptionHandler(NotFoundException.class)
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-	public ErrorResponse getErrorResponse(ResourceNotFoundException e) {
+	public ErrorResponse getErrorResponse(NotFoundException e) {
+		ErrorCodes errorCode = e.getErrorCode();
+		return new ErrorResponse(errorCode.getCode(), e.getMessage());
+	}
+	
+	@ExceptionHandler(DataIntegrityException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public ErrorResponse dataIntegrityError(DataIntegrityException e) {
+		ErrorCodes errorCode = e.getErrorCode();
+		return new ErrorResponse(errorCode.getCode(), e.getMessage());
+	}
+	
+	@ExceptionHandler(InternalException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public ErrorResponse internalError(InternalException e) {
 		ErrorCodes errorCode = e.getErrorCode();
 		return new ErrorResponse(errorCode.getCode(), e.getMessage());
 	}
