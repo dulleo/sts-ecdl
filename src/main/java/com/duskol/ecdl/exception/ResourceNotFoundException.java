@@ -1,4 +1,4 @@
-package com.duskol.ecdl.controller.exception;
+package com.duskol.ecdl.exception;
 
 import com.duskol.ecdl.error.ErrorCodes;
 
