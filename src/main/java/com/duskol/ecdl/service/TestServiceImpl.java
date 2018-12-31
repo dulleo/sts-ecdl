@@ -52,7 +52,7 @@ public class TestServiceImpl implements TestService {
 		
 		Optional<Test> testOpt = repositoryContainer.getTestRepository().findById(id);
 		if (!testOpt.isPresent())
-			throw new ResourceNotFoundException("Test id:" + id + " not found!", ErrorCodes.TEST_NOT_FOUND);
+			throw new ResourceNotFoundException(getErrorMessage(id), ErrorCodes.TEST_NOT_FOUND);
 		
 		TestDTO testDTO = new TestDTO();
 		entityToDTOConverter.convert(testOpt.get(), testDTO);
@@ -83,26 +83,34 @@ public class TestServiceImpl implements TestService {
 		Optional<Test> testOpt = repositoryContainer.getTestRepository().findById(id);
 
 		if (!testOpt.isPresent())
-			throw new ResourceNotFoundException("Test id:" + id + " not found!", ErrorCodes.TEST_NOT_FOUND);
+			throw new ResourceNotFoundException(getErrorMessage(id), ErrorCodes.TEST_NOT_FOUND);
 		
 		List<Question> questions = repositoryContainer.getQuestionRepository().findByTestId(id);
 		
-		if(questions != null && questions.size() != 0)
+		if(questions != null && questions.isEmpty())
 			questionService.deleteQuestions(questions);
 		
 		repositoryContainer.getTestRepository().deleteById(id);
 	}
 
-	
 	@Override
 	public void editTest(TestDTO testDTO) throws ResourceNotFoundException {
 		
 		Optional<Test> testOpt = repositoryContainer.getTestRepository().findById(testDTO.getId());
 		if (!testOpt.isPresent())
-			throw new ResourceNotFoundException("Test id:" + testDTO.getId() + " not found!", ErrorCodes.TEST_NOT_FOUND);
+			throw new ResourceNotFoundException(getErrorMessage(testDTO.getId()), ErrorCodes.TEST_NOT_FOUND);
 		
 		Test test = testOpt.get();
 		dtoToEntityConverter.convert(testDTO, test);
 		repositoryContainer.getTestRepository().save(test);
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private String getErrorMessage(Long id) {
+		return "Test id: " + id + " not found!";
 	}
 }
