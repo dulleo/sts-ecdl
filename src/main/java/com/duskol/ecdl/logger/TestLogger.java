@@ -46,7 +46,7 @@ public class TestLogger {
 		METHOD_NAME = jp.getSignature().getName();
 		LOGGER.info(MESSAGE_FORMAT_START, METHOD_NAME);
 		LOGGER.info("Method Type: {}", requestMapping.method()[0]);
-		LOGGER.info("URL: {}", Arrays.asList(requestMapping.path()).isEmpty() ? requestMapping.value()[0] : requestMapping.path()[0]);
+		LOGGER.info("URL: {}", requestMapping.value()[0]);
 		LOGGER.info("Args: {}",Arrays.toString(jp.getArgs()));
 	}
 	
