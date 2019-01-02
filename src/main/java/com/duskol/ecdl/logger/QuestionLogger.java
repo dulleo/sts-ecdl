@@ -73,6 +73,29 @@ public class QuestionLogger {
 		}
 	}
 	
+	@Pointcut("execution(com.duskol.ecdl.dto.QuestionDTO com.duskol.ecdl.controller.QuestionController.getQuestion(Long)) "
+			+ "&& args(id)")
+	public void getQuestionPointcut(Long id) {
+		//
+	}
+	
+	@Around("getQuestionPointcut(id, questionDTO)")
+	public void getQuestion(ProceedingJoinPoint jp, Long id) throws Throwable {
+		
+		try {
+			jp.proceed();
+			LOGGER.info(MESSAGE_FORMAT_FINISH, METHOD_NAME);
+		} catch (ResourceNotFoundException e) {
+			getNotFoundError(e, ErrorCodes.QUESTION_CAN_NOT_BE_CREATED, METHOD_NAME);
+		} catch (DataIntegrityViolationException e) {
+			getDataIntegrityViolationError(e, ErrorCodes.QUESTION_CAN_NOT_BE_CREATED, METHOD_NAME);
+		} catch (DataAccessException e) {
+			getDataAccessError(e, ErrorCodes.QUESTION_CAN_NOT_BE_CREATED, METHOD_NAME);
+		} catch (Exception e) {
+			getInternalError(e, ErrorCodes.QUESTION_CAN_NOT_BE_CREATED, METHOD_NAME);
+		}
+	}
+	
 	private void getNotFoundError(Exception e, ErrorCodes errorCodes, String methodName) throws NotFoundException {
 		LOGGER.error(MESSAGE_FORMAT_ERROR, methodName, e.getMessage(),e);
 		throw new NotFoundException(e.getMessage(), errorCodes);
