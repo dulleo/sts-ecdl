@@ -1,6 +1,7 @@
 package com.duskol.ecdl.logger;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -79,14 +80,90 @@ public class QuestionLogger {
 		//
 	}
 	
-	@Around("getQuestionPointcut(id, questionDTO)")
-	public void getQuestion(ProceedingJoinPoint jp, Long id) throws Throwable {
+	@Around("getQuestionPointcut(id)")
+	public QuestionDTO getQuestion(ProceedingJoinPoint jp, Long id) throws Throwable {
+		
+		QuestionDTO result = null;
+		
+		try {
+			result = (QuestionDTO) jp.proceed();
+			LOGGER.info(MESSAGE_FORMAT_FINISH, METHOD_NAME);
+		} catch (ResourceNotFoundException e) {
+			getNotFoundError(e, ErrorCodes.QUESTION_CAN_NOT_BE_PROVIDED, METHOD_NAME);
+		} catch (DataIntegrityViolationException e) {
+			getDataIntegrityViolationError(e, ErrorCodes.QUESTION_CAN_NOT_BE_PROVIDED, METHOD_NAME);
+		} catch (DataAccessException e) {
+			getDataAccessError(e, ErrorCodes.QUESTION_CAN_NOT_BE_PROVIDED, METHOD_NAME);
+		} catch (Exception e) {
+			getInternalError(e, ErrorCodes.QUESTION_CAN_NOT_BE_PROVIDED, METHOD_NAME);
+		}
+		return result;
+	}
+	
+	@Pointcut("execution(java.util.List<com.duskol.ecdl.dto.QuestionDTO> com.duskol.ecdl.controller.QuestionController.getQuestions(Long)) "
+			+ "&& args(id)")
+	public void getQuestionsPointcut(Long id) {
+		//
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Around("getQuestionsPointcut(id)")
+	public List<QuestionDTO> getQuestions(ProceedingJoinPoint jp, Long id) throws Throwable {
+		
+		List<QuestionDTO> result = null;
+		
+		try {
+			result = (List<QuestionDTO>) jp.proceed();
+			LOGGER.info(MESSAGE_FORMAT_FINISH, METHOD_NAME);
+		} catch (ResourceNotFoundException e) {
+			getNotFoundError(e, ErrorCodes.QUESTIONS_CAN_NOT_BE_PROVIDED, METHOD_NAME);
+		} catch (DataIntegrityViolationException e) {
+			getDataIntegrityViolationError(e, ErrorCodes.QUESTIONS_CAN_NOT_BE_PROVIDED, METHOD_NAME);
+		} catch (DataAccessException e) {
+			getDataAccessError(e, ErrorCodes.QUESTIONS_CAN_NOT_BE_PROVIDED, METHOD_NAME);
+		} catch (Exception e) {
+			getInternalError(e, ErrorCodes.QUESTIONS_CAN_NOT_BE_PROVIDED, METHOD_NAME);
+		}
+		return result;
+	}
+	
+	@Pointcut("execution(void com.duskol.ecdl.controller.QuestionController.deleteQuestion(Long)) "
+			+ "&& args(id)")
+	public void deleteQuestionPointcut(Long id) {
+		//
+	}
+	
+	@Around("deleteQuestionPointcut(id)")
+	public void deleteQuestion(ProceedingJoinPoint jp, Long id) throws Throwable {
 		
 		try {
 			jp.proceed();
 			LOGGER.info(MESSAGE_FORMAT_FINISH, METHOD_NAME);
 		} catch (ResourceNotFoundException e) {
-			getNotFoundError(e, ErrorCodes.QUESTION_CAN_NOT_BE_CREATED, METHOD_NAME);
+			getNotFoundError(e, ErrorCodes.QUESTION_CAN_NOT_BE_DELETED, METHOD_NAME);
+		} catch (DataIntegrityViolationException e) {
+			getDataIntegrityViolationError(e, ErrorCodes.QUESTION_CAN_NOT_BE_DELETED, METHOD_NAME);
+		} catch (DataAccessException e) {
+			getDataAccessError(e, ErrorCodes.QUESTION_CAN_NOT_BE_DELETED, METHOD_NAME);
+		} catch (Exception e) {
+			getInternalError(e, ErrorCodes.QUESTION_CAN_NOT_BE_DELETED, METHOD_NAME);
+		}
+	}
+	
+	@Pointcut("execution(void com.duskol.ecdl.controller.QuestionController.editQuestion(Long, com.duskol.ecdl.dto.QuestionDTO)) "
+			+ "&& args(id, questionDTO)")
+	public void editQuestionPointcut(Long id, QuestionDTO questionDTO) {
+		//
+	}
+	
+	@Around("editQuestionPointcut(id, questionDTO)")
+	public void editQuestion(ProceedingJoinPoint jp, Long id, QuestionDTO questionDTO) throws Throwable {
+		
+		try {
+			jp.proceed();
+			LOGGER.info(MESSAGE_FORMAT_FINISH, METHOD_NAME);
+		} catch (ResourceNotFoundException e) {
+			getNotFoundError(e, ErrorCodes.QUESTION_CAN_NOT_BE_UPDATED, METHOD_NAME);
 		} catch (DataIntegrityViolationException e) {
 			getDataIntegrityViolationError(e, ErrorCodes.QUESTION_CAN_NOT_BE_CREATED, METHOD_NAME);
 		} catch (DataAccessException e) {
@@ -125,5 +202,4 @@ public class QuestionLogger {
 		LOGGER.error(MESSAGE_FORMAT_ERROR, methodName, e.getMessage(), e);
 		throw new InternalException(e.getMessage(), errorCodes);
 	}
-
 }
