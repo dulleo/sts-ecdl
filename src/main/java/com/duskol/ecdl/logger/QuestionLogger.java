@@ -33,13 +33,13 @@ import com.duskol.ecdl.exception.ResourceNotFoundException;
 @Component
 public class QuestionLogger {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(TestLogger.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(QuestionLogger.class);
 	private static final String MESSAGE_FORMAT_START = "Method \"{}\" has been started";
 	private static final String MESSAGE_FORMAT_FINISH = "Method \"{}\" successfully finished.......";
 	private static final String MESSAGE_FORMAT_ERROR = "Method \"{}\" unsuccessfully finished. ERROR: {}";
 	private static String METHOD_NAME;
 	
-	@Pointcut("within(@org.springframework.web.bind.annotation.RestController *) && @annotation(requestMapping)")
+	@Pointcut("within(@org.springframework.web.bind.annotation.RestController com.duskol.ecdl.controller.QuestionController) && @annotation(requestMapping)")
 	public void controller(RequestMapping requestMapping) {}
 	
 	@Before("controller(requestMapping)")
@@ -47,8 +47,8 @@ public class QuestionLogger {
 		METHOD_NAME = jp.getSignature().getName();
 		LOGGER.info(MESSAGE_FORMAT_START, METHOD_NAME);
 		LOGGER.info("Method Type: {}", requestMapping.method()[0]);
-		LOGGER.info("URL: {}", requestMapping.value()[0]);
-		LOGGER.info("Args: {}",Arrays.toString(jp.getArgs()));
+		LOGGER.info("URL: {}", Arrays.asList(requestMapping.path()).isEmpty() ? requestMapping.value()[0] : requestMapping.path()[0]);
+		LOGGER.info("Method Args: {}",Arrays.toString(jp.getArgs()));
 	}
 	
 	@Pointcut("execution(void com.duskol.ecdl.controller.QuestionController.createQuestion(Long, com.duskol.ecdl.dto.QuestionDTO)) "
