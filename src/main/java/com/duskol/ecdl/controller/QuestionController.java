@@ -12,10 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,24 +24,23 @@ import com.duskol.ecdl.exception.ResourceNotFoundException;
 import com.duskol.ecdl.service.QuestionService;
 
 @RestController
-@RequestMapping(value="/ecdl")
+@RequestMapping(value="")
 public class QuestionController {
 	
 private final static Logger logger = LoggerFactory.getLogger(QuestionController.class);
 	
 	@Autowired
 	QuestionService questionService;
-	
-	@PostMapping(path="/tests/{id}/questions",consumes = "application/json", produces = "application/json")
+
 	@ResponseStatus(value=HttpStatus.CREATED)
-	public void createQuestion(@PathVariable Long id,  @RequestBody @Valid QuestionDTO questionDto) throws ResourceNotFoundException {
-		logger.info("Save question:" + questionDto.toString());
+	@RequestMapping(path="/ecdl/tests/{id}/questions", method=RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public void createQuestion(@PathVariable Long id,  @RequestBody @Valid @NotNull QuestionDTO questionDto) throws ResourceNotFoundException {
 		questionService.createQuestion(id, questionDto);
-		//logger.info("Created question:" + createQuestion.toString());
+		
 	}
 	
-	@GetMapping("/questions/{id}")
 	@ResponseStatus(value=HttpStatus.OK)
+	@RequestMapping(value="/ecdl/questions/{id}", method=RequestMethod.GET)
 	public QuestionDTO getQuestion(@PathVariable Long id) throws ResourceNotFoundException {
 		logger.info("Get question id:" + id);
 		QuestionDTO result = questionService.getQuestion(id);
@@ -49,7 +48,7 @@ private final static Logger logger = LoggerFactory.getLogger(QuestionController.
 		return result;
 	}
 	
-	@GetMapping(path="/tests/{testId}/questions")
+	@GetMapping(path="/ecdl/tests/{testId}/questions")
 	@ResponseStatus(value=HttpStatus.OK)
 	public List<QuestionDTO> getQuestions(@PathVariable Long testId) throws ResourceNotFoundException {
 		logger.info("Get questions for test id:" + testId);
@@ -58,14 +57,14 @@ private final static Logger logger = LoggerFactory.getLogger(QuestionController.
 		
 	}
 	
-	@DeleteMapping(path="/questions/{questionId}")
+	@DeleteMapping(path="/ecdl/questions/{questionId}")
 	@ResponseStatus(value=HttpStatus.NO_CONTENT)
 	public void deleteQuestion(@PathVariable Long questionId) throws ResourceNotFoundException {
 		logger.info("Delete question id:" + questionId);
 		questionService.deleteQuestion(questionId);
 	}
 	
-	@PutMapping(path="/questions/{questionId}",consumes = "application/json", produces = "application/json")
+	@PutMapping(path="/ecdl/questions/{questionId}",consumes = "application/json", produces = "application/json")
 	@ResponseStatus(value=HttpStatus.NO_CONTENT)
 	public void editQuestion(@PathVariable Long questionId, @RequestBody @NotNull @Valid QuestionDTO questionDTO) throws ResourceNotFoundException {
 		logger.info("Edit question id: " + questionId);
