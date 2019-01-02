@@ -9,7 +9,8 @@ public enum ErrorCodes {
 	COMPLETED_EXAM_NOT_FOUND(5), 
 	TESTS_NOT_FOUND(6), 
 	TEST_CAN_NOT_BE_CREATED(7), 
-	TEST_CAN_NOT_BE_PROVIDED(8);
+	TEST_CAN_NOT_BE_PROVIDED(8), 
+	QUESTION_CAN_NOT_BE_CREATED(9);
 	
 	private final Integer code;
 	
