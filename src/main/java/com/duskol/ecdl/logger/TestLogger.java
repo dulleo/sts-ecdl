@@ -38,7 +38,7 @@ public class TestLogger {
 	private static final String MESSAGE_FORMAT_ERROR = "Method \"{}\" unsuccessfully finished. ERROR: {}";
 	private static String METHOD_NAME;
 	
-	@Pointcut("within(@org.springframework.web.bind.annotation.RestController *) && @annotation(requestMapping)")
+	@Pointcut("within(@org.springframework.web.bind.annotation.RestController com.duskol.ecdl.controller.TestController) && @annotation(requestMapping)")
 	public void controller(RequestMapping requestMapping) {}
 	
 	@Before("controller(requestMapping)")
@@ -105,7 +105,7 @@ public class TestLogger {
 	@Around("getTestPointcut(id)")
 	public TestDTO getTest(ProceedingJoinPoint jp, Long id) throws Throwable {
 
-		TestDTO result = new TestDTO();
+		TestDTO result = null;
 		
 		try {
 			result = (TestDTO) jp.proceed();
