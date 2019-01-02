@@ -49,9 +49,9 @@ private final static Logger logger = LoggerFactory.getLogger(QuestionController.
 	}
 	
 	@ResponseStatus(value=HttpStatus.OK)
-	@RequestMapping(path="/ecdl/tests/{testId}/questions", method=RequestMethod.GET)
-	public List<QuestionDTO> getQuestions(@PathVariable Long testId) throws ResourceNotFoundException {
-		List<QuestionDTO> questionDTOs = questionService.getQuestions(testId);
+	@RequestMapping(path="/ecdl/tests/{id}/questions", method=RequestMethod.GET)
+	public List<QuestionDTO> getQuestions(@PathVariable Long id) throws ResourceNotFoundException {
+		List<QuestionDTO> questionDTOs = questionService.getQuestions(id);
 		return questionDTOs;
 	}
 	
