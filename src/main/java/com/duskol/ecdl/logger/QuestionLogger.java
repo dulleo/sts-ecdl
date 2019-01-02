@@ -3,13 +3,25 @@ package com.duskol.ecdl.logger;
 import java.util.Arrays;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.hibernate.JDBCException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.duskol.ecdl.dto.QuestionDTO;
+import com.duskol.ecdl.error.ErrorCodes;
+import com.duskol.ecdl.exception.DataIntegrityException;
+import com.duskol.ecdl.exception.InternalException;
+import com.duskol.ecdl.exception.NotFoundException;
+import com.duskol.ecdl.exception.ResourceNotFoundException;
 
 /**
  * 
@@ -36,6 +48,59 @@ public class QuestionLogger {
 		LOGGER.info("Method Type: {}", requestMapping.method()[0]);
 		LOGGER.info("URL: {}", requestMapping.value()[0]);
 		LOGGER.info("Args: {}",Arrays.toString(jp.getArgs()));
+	}
+	
+	@Pointcut("execution(void com.duskol.ecdl.controller.QuestionController.createQuestion(Long, com.duskol.ecdl.dto.QuestionDTO)) "
+			+ "&& args(id, questionDTO)")
+	public void createQuestionPointcut(Long id, QuestionDTO questionDTO) {
+		//
+	}
+	
+	@Around("createQuestionPointcut(id, questionDTO)")
+	public void createQuestion(ProceedingJoinPoint jp, Long id, QuestionDTO questionDTO) throws Throwable {
+		
+		try {
+			jp.proceed();
+			LOGGER.info(MESSAGE_FORMAT_FINISH, METHOD_NAME);
+		} catch (ResourceNotFoundException e) {
+			getNotFoundError(e, ErrorCodes.QUESTION_CAN_NOT_BE_CREATED, METHOD_NAME);
+		} catch (DataIntegrityViolationException e) {
+			getDataIntegrityViolationError(e, ErrorCodes.QUESTION_CAN_NOT_BE_CREATED, METHOD_NAME);
+		} catch (DataAccessException e) {
+			getDataAccessError(e, ErrorCodes.QUESTION_CAN_NOT_BE_CREATED, METHOD_NAME);
+		} catch (Exception e) {
+			getInternalError(e, ErrorCodes.QUESTION_CAN_NOT_BE_CREATED, METHOD_NAME);
+		}
+	}
+	
+	private void getNotFoundError(Exception e, ErrorCodes errorCodes, String methodName) throws NotFoundException {
+		LOGGER.error(MESSAGE_FORMAT_ERROR, methodName, e.getMessage(),e);
+		throw new NotFoundException(e.getMessage(), errorCodes);
+	}
+	
+	private void getDataIntegrityViolationError(DataIntegrityViolationException e, ErrorCodes errorCodes, String methodName) throws DataIntegrityException {
+		generateError(e, errorCodes, methodName);    
+	}
+	
+	private void getDataAccessError(DataAccessException e, ErrorCodes errorCodes, String methodName) throws DataIntegrityException {
+		generateError(e, errorCodes, methodName); 
+	}
+	
+	private void generateError(Exception e, ErrorCodes errorCodes, String methodName) throws DataIntegrityException {
+		if(e.getCause() instanceof JDBCException && ((JDBCException)e.getCause()).getSQLException() != null)
+        {                    
+			String message = ((JDBCException)e.getCause()).getSQLException().getMessage();
+			LOGGER.error(MESSAGE_FORMAT_ERROR,methodName,message,e);
+            throw new DataIntegrityException(message, errorCodes);
+        } else {
+        	LOGGER.error(MESSAGE_FORMAT_ERROR,methodName,e.getMessage(), e);
+            throw new DataIntegrityException(e.getMessage(), errorCodes); 
+        }
+	}
+	
+	private void getInternalError(Exception e, ErrorCodes errorCodes, String methodName) throws InternalException {
+		LOGGER.error(MESSAGE_FORMAT_ERROR, methodName, e.getMessage(), e);
+		throw new InternalException(e.getMessage(), errorCodes);
 	}
 
 }
