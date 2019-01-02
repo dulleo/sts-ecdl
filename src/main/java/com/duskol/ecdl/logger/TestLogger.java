@@ -105,7 +105,7 @@ public class TestLogger {
 	@Around("getTestPointcut(id)")
 	public TestDTO getTest(ProceedingJoinPoint jp, Long id) throws Throwable {
 
-		TestDTO result = new TestDTO();
+		TestDTO result = null;
 		
 		try {
 			result = (TestDTO) jp.proceed();
