@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
 import com.duskol.ecdl.dto.QuestionDTO;
+import com.duskol.ecdl.exception.ResourceNotFoundException;
 import com.duskol.ecdl.service.QuestionService;
 
 @RestController

@@ -2,12 +2,12 @@ package com.duskol.ecdl.service;
 
 import java.util.List;
 
-import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
 import com.duskol.ecdl.dto.TestDTO;
+import com.duskol.ecdl.exception.ResourceNotFoundException;
 
 public interface TestService {
 
-	TestDTO createTest(TestDTO testDTO);
+	void createTest(TestDTO testDTO);
 
 	TestDTO getTest(Long id) throws ResourceNotFoundException;
 
@@ -15,6 +15,6 @@ public interface TestService {
 
 	void deleteTest(Long id) throws ResourceNotFoundException;
 
-	TestDTO editTest(TestDTO testDTO) throws ResourceNotFoundException;
+	void editTest(TestDTO testDTO) throws ResourceNotFoundException;
 
 }

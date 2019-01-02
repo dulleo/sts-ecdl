@@ -9,9 +9,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
 import com.duskol.ecdl.dto.TestDTO;
 import com.duskol.ecdl.error.ErrorCodes;
+import com.duskol.ecdl.exception.ResourceNotFoundException;
 import com.duskol.ecdl.model.Question;
 import com.duskol.ecdl.model.Test;
 import com.duskol.ecdl.repository.RepositoryContainer;
@@ -40,16 +40,11 @@ public class TestServiceImpl implements TestService {
 	QuestionService questionService;
 
 	@Override
-	public TestDTO createTest(TestDTO testDTO) {
+	public void createTest(TestDTO testDTO) {
 		
 		Test test = new Test();
 		dtoToEntityConverter.convert(testDTO, test);
-		
-		Test createdTest = repositoryContainer.getTestRepository().save(test);
-		TestDTO createdTestDTO = new TestDTO();
-		entityToDTOConverter.convert(createdTest, createdTestDTO);
-		
-		return createdTestDTO;
+		repositoryContainer.getTestRepository().save(test);
 	}
 
 	@Override
@@ -57,7 +52,7 @@ public class TestServiceImpl implements TestService {
 		
 		Optional<Test> testOpt = repositoryContainer.getTestRepository().findById(id);
 		if (!testOpt.isPresent())
-			throw new ResourceNotFoundException("Test id:" + id + " not found!", ErrorCodes.TEST_NOT_FOUND);
+			throw new ResourceNotFoundException(getErrorMessage(id), ErrorCodes.TEST_NOT_FOUND);
 		
 		TestDTO testDTO = new TestDTO();
 		entityToDTOConverter.convert(testOpt.get(), testDTO);
@@ -68,7 +63,7 @@ public class TestServiceImpl implements TestService {
 	public List<TestDTO> getTests() throws ResourceNotFoundException {
 		
 		List<Test> tests = repositoryContainer.getTestRepository().findAll();
-		if(tests == null) //proveri da li vraca null ili prazan niz - ovo mozda ne bi trbalo da je greska
+		if(tests.isEmpty()) 
 			throw new ResourceNotFoundException("Database does not contains tests!", ErrorCodes.TESTS_NOT_FOUND);
 		
 		List<TestDTO> dtos = new ArrayList<>();
@@ -88,31 +83,34 @@ public class TestServiceImpl implements TestService {
 		Optional<Test> testOpt = repositoryContainer.getTestRepository().findById(id);
 
 		if (!testOpt.isPresent())
-			throw new ResourceNotFoundException("Test id:" + id + " not found!", ErrorCodes.TEST_NOT_FOUND);
+			throw new ResourceNotFoundException(getErrorMessage(id), ErrorCodes.TEST_NOT_FOUND);
 		
 		List<Question> questions = repositoryContainer.getQuestionRepository().findByTestId(id);
 		
-		if(questions != null && questions.size() != 0)
+		if(questions != null && questions.isEmpty())
 			questionService.deleteQuestions(questions);
 		
 		repositoryContainer.getTestRepository().deleteById(id);
 	}
 
-	
 	@Override
-	public TestDTO editTest(TestDTO testDTO) throws ResourceNotFoundException {
+	public void editTest(TestDTO testDTO) throws ResourceNotFoundException {
 		
 		Optional<Test> testOpt = repositoryContainer.getTestRepository().findById(testDTO.getId());
 		if (!testOpt.isPresent())
-			throw new ResourceNotFoundException("Test id:" + testDTO.getId() + " not found!", ErrorCodes.TEST_NOT_FOUND);
+			throw new ResourceNotFoundException(getErrorMessage(testDTO.getId()), ErrorCodes.TEST_NOT_FOUND);
 		
 		Test test = testOpt.get();
 		dtoToEntityConverter.convert(testDTO, test);
-		Test updatedTest = repositoryContainer.getTestRepository().save(test);
-		
-		TestDTO updatedTestDTO = new TestDTO();
-		entityToDTOConverter.convert(updatedTest, updatedTestDTO);
-		
-		return updatedTestDTO;
+		repositoryContainer.getTestRepository().save(test);
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	private String getErrorMessage(Long id) {
+		return "Test id: " + id + " not found!";
 	}
 }

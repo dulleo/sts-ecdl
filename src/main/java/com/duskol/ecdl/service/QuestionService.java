@@ -2,8 +2,8 @@ package com.duskol.ecdl.service;
 
 import java.util.List;
 
-import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
 import com.duskol.ecdl.dto.QuestionDTO;
+import com.duskol.ecdl.exception.ResourceNotFoundException;
 import com.duskol.ecdl.model.Question;
 
 public interface QuestionService {

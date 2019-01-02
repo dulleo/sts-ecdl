@@ -1,7 +1,7 @@
 package com.duskol.ecdl.service;
 
-import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
 import com.duskol.ecdl.dto.ExamDTO;
+import com.duskol.ecdl.exception.ResourceNotFoundException;
 
 public interface ExamService {
 	

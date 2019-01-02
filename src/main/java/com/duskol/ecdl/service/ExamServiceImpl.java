@@ -11,13 +11,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.duskol.ecdl.controller.exception.ResourceNotFoundException;
 import com.duskol.ecdl.dto.CompletedExamDTO;
 import com.duskol.ecdl.dto.ExamAnswerDTO;
 import com.duskol.ecdl.dto.ExamDTO;
 import com.duskol.ecdl.dto.ExamQuestionDTO;
 import com.duskol.ecdl.dto.ExamTestDTO;
 import com.duskol.ecdl.error.ErrorCodes;
+import com.duskol.ecdl.exception.ResourceNotFoundException;
 import com.duskol.ecdl.model.Answer;
 import com.duskol.ecdl.model.CompletedExam;
 import com.duskol.ecdl.model.Question;
