@@ -37,8 +37,8 @@ private final static Logger logger = LoggerFactory.getLogger(QuestionController.
 
 	@ResponseStatus(value=HttpStatus.CREATED)
 	@RequestMapping(path="/ecdl/tests/{id}/questions", method=RequestMethod.POST, consumes = "application/json", produces = "application/json")
-	public void createQuestion(@PathVariable Long id,  @RequestBody @Valid @NotNull QuestionDTO questionDto) throws ResourceNotFoundException {
-		questionService.createQuestion(id, questionDto);
+	public void createQuestion(@PathVariable Long id,  @RequestBody @Valid @NotNull QuestionDTO questionDTO) throws ResourceNotFoundException {
+		questionService.createQuestion(id, questionDTO);
 	}
 	
 	@ResponseStatus(value=HttpStatus.OK)
