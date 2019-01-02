@@ -5,8 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,13 +28,11 @@ import com.duskol.ecdl.service.QuestionService;
 @RequestMapping(value="")
 public class QuestionController {
 	
-private final static Logger logger = LoggerFactory.getLogger(QuestionController.class);
-	
 	@Autowired
 	QuestionService questionService;
 
 	@ResponseStatus(value=HttpStatus.CREATED)
-	@RequestMapping(path="/ecdl/tests/{id}/questions", method=RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	@RequestMapping(value="/ecdl/tests/{id}/questions", method=RequestMethod.POST, consumes = "application/json", produces = "application/json")
 	public void createQuestion(@PathVariable Long id,  @RequestBody @Valid @NotNull QuestionDTO questionDTO) throws ResourceNotFoundException {
 		questionService.createQuestion(id, questionDTO);
 	}
@@ -49,22 +45,21 @@ private final static Logger logger = LoggerFactory.getLogger(QuestionController.
 	}
 	
 	@ResponseStatus(value=HttpStatus.OK)
-	@RequestMapping(path="/ecdl/tests/{id}/questions", method=RequestMethod.GET)
+	@RequestMapping(value="/ecdl/tests/{id}/questions", method=RequestMethod.GET)
 	public List<QuestionDTO> getQuestions(@PathVariable Long id) throws ResourceNotFoundException {
 		List<QuestionDTO> questionDTOs = questionService.getQuestions(id);
 		return questionDTOs;
 	}
 	
 	@ResponseStatus(value=HttpStatus.NO_CONTENT)
-	@RequestMapping(path="/ecdl/questions/{questionId}", method=RequestMethod.GET)
+	@RequestMapping(value="/ecdl/questions/{questionId}", method=RequestMethod.DELETE)
 	public void deleteQuestion(@PathVariable Long questionId) throws ResourceNotFoundException {
 		questionService.deleteQuestion(questionId);
 	}
 	
 	@ResponseStatus(value=HttpStatus.NO_CONTENT)
-	@RequestMapping(path="/ecdl/questions/{questionId}", method=RequestMethod.PUT,consumes = "application/json", produces = "application/json")
+	@RequestMapping(value="/ecdl/questions/{questionId}", method=RequestMethod.PUT,consumes = "application/json", produces = "application/json")
 	public void editQuestion(@PathVariable Long questionId, @RequestBody @NotNull @Valid QuestionDTO questionDTO) throws ResourceNotFoundException {
-		logger.info("Edit question id: " + questionId);
 		questionService.editQuestion(questionId, questionDTO);
 	}
 	
